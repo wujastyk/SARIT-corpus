@@ -111,27 +111,11 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--link); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 /* ---------------------------------------------------------------
-   Site header: the Suśruta Project bar, then this site's own bar
+   Site header
    ------------------------------------------------------------- */
 
 .site-head { background: var(--navy); color: #fff; }
 .site-head :focus-visible { outline-color: var(--saffron); }
-
-.umbrella { background: var(--navy-deep); font-family: var(--sans); font-size: 13.5px; }
-.umbrella-inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px 16px;
-  min-height: 36px;
-}
-.umbrella a { color: var(--on-navy-muted); text-decoration: none; }
-.umbrella a:hover, .umbrella a:focus { color: #fff; }
-.umbrella-home { font-weight: 500; }
-.umbrella-home span { color: var(--saffron); margin-right: 4px; }
-.umbrella ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 18px; }
-.umbrella ul a { display: block; padding: 8px 0; }
 
 .head-inner {
   display: flex;
@@ -454,7 +438,6 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 2px; padd
 
 @media (max-width: 720px) {
   .wrap { padding-left: 16px; padding-right: 16px; }
-  .umbrella-inner { justify-content: center; }
   .head-inner { justify-content: center; }
   .brand { margin-right: 0; width: 100%; justify-content: center; }
   .site-nav { justify-content: center; }
