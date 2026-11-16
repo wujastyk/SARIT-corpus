@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <TEI xml:id="sarit__aṣṭāṅgasaṅgraha" xmlns="http://www.tei-c.org/ns/1.0"
     xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -24328,7 +24329,7 @@
                     <p xml:id="AS.Utt.5.29"><label>AS.Utt.5.29 </label>dvitīyaṃ kalaśaṃ
                         puṇyamādityasadṛśaprabham | </p>
                     <p>yamo dadātu bhagavān vaijayantaṃ tu nāmataḥ ||</p>
-                    <p xml:id="AS.Utt.5.30"><label>AS.Utt.5.30 </label>kṛṣṇāñjananibhirghoraiḥ
+                    <p xml:id="AS.Utt.5.30"><label>AS.Utt.5.30 </label>kṛṣṇāñjananibhairghoraiḥ
                         kṛṣṇāmbaradharaistathā | </p>
                     <p>vṛtaḥ karālairvikṛtai rākṣasairugravikramaiḥ ||</p>
                     <p xml:id="AS.Utt.5.31"><label>AS.Utt.5.31
