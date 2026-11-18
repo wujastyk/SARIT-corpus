@@ -5,7 +5,12 @@ name: Build and deploy search site
 on:
   push:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+  repository_dispatch:        # signal sent by the GRETIL repository after a push
+    types: [gretil-updated]
+
+env:
+  GRETIL_REPO: wujastyk/GRETIL-corpus
 
 permissions:
   contents: read
@@ -22,6 +27,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check out the GRETIL texts
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.GRETIL_REPO }}
+          path: _gretil
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -29,7 +40,7 @@ jobs:
       - name: Extract searchable text and citation data from the TEI files
         run: |
           pip install lxml
-          python website/_tools/extract.py --repo . --out website/data
+          python website/_tools/extract.py --repo . --gretil _gretil --gretil-repo-name "$GRETIL_REPO" --out website/data
 
       - uses: ruby/setup-ruby@v1
         with:

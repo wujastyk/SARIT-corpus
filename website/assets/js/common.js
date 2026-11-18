@@ -25,7 +25,8 @@
 
   function xmlUrl(t, line) {
     const path = t.file.split('/').map(encodeURIComponent).join('/');
-    return S.repo + '/blob/' + S.branch + '/' + path + (line ? '#L' + line : '');
+    const repo = t.repo ? 'https://github.com/' + t.repo : S.repo;
+    return repo + '/blob/' + (t.branch || S.branch) + '/' + path + (line ? '#L' + line : '');
   }
   function readerUrl(id, seg) {
     return S.base + 'read.html?t=' + encodeURIComponent(id) + (seg != null ? '&s=' + seg + '#s' + seg : '');
@@ -50,7 +51,7 @@
     if (h.kind === 'v') parts.push('(variant reading)');
     let s = parts.join(', ') + '.';
     if (t.source && t.source.length) s += ' Source: ' + t.source[0].replace(/\.$/, '') + '.';
-    s += ' ' + (t.coll === 'GRETIL' ? 'GRETIL e-text in the SARIT corpus' : 'SARIT e-text') + ', ' + t.file + ', line ' + h.line + ', ' + xmlUrl(t, h.line) + ' (accessed ' + today + ').';
+    s += ' ' + (t.coll === 'GRETIL' ? 'GRETIL TEI e-text' : 'SARIT e-text') + ', ' + (t.repo ? t.repo + ' ' : '') + t.file + ', line ' + h.line + ', ' + xmlUrl(t, h.line) + ' (accessed ' + today + ').';
     return s;
   }
 

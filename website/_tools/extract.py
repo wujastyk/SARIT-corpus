@@ -3,7 +3,7 @@
 Extract searchable, citable text segments from the TEI files of the
 SARIT corpus and write them as JSON for the Jekyll search site.
 
-Usage:  python3 website/_tools/extract.py  [--repo .] [--out website/data]
+Usage:  python3 website/_tools/extract.py  [--repo .] [--out website/data] [--gretil ../GRETIL-corpus]
 
 Output
   data/catalogue.json      one record per text (bibliographic metadata)
@@ -538,18 +538,37 @@ def main():
     ap.add_argument('--repo', default='.')
     ap.add_argument('--out', default='website/data')
     ap.add_argument('--only', default='')
+    ap.add_argument('--repo-name', default='wujastyk/SARIT-corpus',
+                    help='GitHub owner/name of the SARIT repository (for XML links)')
+    ap.add_argument('--gretil', default='',
+                    help='path to a checkout of the separate GRETIL repository; if not given, '
+                         'the GRETIL-corpustei/ folder inside --repo is used (if present)')
+    ap.add_argument('--gretil-repo-name', default='wujastyk/GRETIL-corpus',
+                    help='GitHub owner/name of the GRETIL repository (for XML links)')
+    ap.add_argument('--branch', default='main')
+    ap.add_argument('--gretil-branch', default='main')
     a = ap.parse_args()
     repo = os.path.abspath(a.repo)
     cfgpath = os.path.join(repo, 'website', '_tools', 'citation-config.json')
     cfgall = json.load(open(cfgpath, encoding='utf-8')) if os.path.exists(cfgpath) else {}
     os.makedirs(os.path.join(a.out, 't'), exist_ok=True)
     os.makedirs(os.path.join(a.out, 'm'), exist_ok=True)
-    files = sorted(glob.glob(os.path.join(repo, '*.xml'))) + \
-        sorted(glob.glob(os.path.join(repo, 'GRETIL-corpustei', '*.xml')))
+    # (path, root of the repository it lives in, collection, GitHub repo, branch)
+    files = [(f, repo, 'SARIT', a.repo_name, a.branch) for f in sorted(glob.glob(os.path.join(repo, '*.xml')))]
+    if a.gretil:
+        groot = os.path.abspath(a.gretil)
+        gfiles = sorted(f for f in glob.glob(os.path.join(groot, '**', '*.xml'), recursive=True)
+                        if not any(part.startswith('.') for part in os.path.relpath(f, groot).split(os.sep)))
+        files += [(f, groot, 'GRETIL', a.gretil_repo_name, a.gretil_branch) for f in gfiles]
+    else:
+        files += [(f, repo, 'GRETIL', a.repo_name, a.branch)
+                  for f in sorted(glob.glob(os.path.join(repo, 'GRETIL-corpustei', '*.xml')))]
+    print('SARIT files:', sum(1 for x in files if x[2] == 'SARIT'),
+          ' GRETIL files:', sum(1 for x in files if x[2] == 'GRETIL'), file=sys.stderr)
     skipnames = set(cfgall.get('_skipFiles', ['saritcorpus.xml', '00-sarit-tei-header-template.xml']))
     cat, slugs = [], set()
-    for f in files:
-        rel = os.path.relpath(f, repo)
+    for f, froot, coll, ghrepo, ghbranch in files:
+        rel = os.path.relpath(f, froot)
         base = os.path.basename(f)
         if base in skipnames or (a.only and a.only not in rel):
             continue
@@ -594,7 +613,9 @@ def main():
         rec = OrderedDict()
         rec['id'] = slug
         rec['file'] = rel.replace(os.sep, '/')
-        rec['coll'] = 'GRETIL' if rel.startswith('GRETIL') else 'SARIT'
+        rec['coll'] = coll
+        rec['repo'] = ghrepo
+        rec['branch'] = ghbranch
         rec.update(meta)
         if not rec.get('title'):
             rec['title'] = os.path.splitext(base)[0]

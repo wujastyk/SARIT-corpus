@@ -1,8 +1,15 @@
 # SARIT corpus search site
 
-A Jekyll site that searches every TEI file in this repository (the SARIT texts in
-the root folder and the GRETIL texts in `GRETIL-corpustei/`). It is published with
-GitHub Pages at <https://wujastyk.github.io/SARIT-corpus/>.
+A Jekyll site that searches the SARIT TEI files in the root folder of this
+repository and the GRETIL TEI files in the separate repository
+[wujastyk/GRETIL-corpus](https://github.com/wujastyk/GRETIL-corpus). It is
+published with GitHub Pages at <https://wujastyk.github.io/SARIT-corpus/>.
+
+The build checks out both repositories. It runs on every push to `main` here,
+and also when the GRETIL repository sends a `gretil-updated` signal (its own
+workflow does this after every push, using a token stored as the secret
+`SARIT_DISPATCH_TOKEN` in the GRETIL repository). It can also be started by hand
+from the Actions tab ("Run workflow").
 
 ## How it works
 
@@ -29,7 +36,8 @@ The workflow file must be in `.github/workflows/` on the `main` branch.
 
 ```sh
 pip install lxml
-python3 website/_tools/extract.py --repo . --out website/data   # ~1–2 minutes
+git clone https://github.com/wujastyk/GRETIL-corpus ../GRETIL-corpus
+python3 website/_tools/extract.py --repo . --gretil ../GRETIL-corpus --out website/data   # ~1–2 minutes
 cd website
 bundle install
 bundle exec jekyll serve      # then open http://localhost:4000/SARIT-corpus/

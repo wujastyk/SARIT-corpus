@@ -8,8 +8,9 @@ slug: help
 # How to search
 
 Type a word or phrase and press **Search**. The search runs in your browser over
-the TEI files of this repository: the SARIT texts and the GRETIL texts in
-`GRETIL-corpustei/`.
+the TEI files of two repositories: the SARIT texts in
+[wujastyk/SARIT-corpus](https://github.com/wujastyk/SARIT-corpus) and the GRETIL
+texts in [wujastyk/GRETIL-corpus](https://github.com/wujastyk/GRETIL-corpus).
 
 ## Scripts and transliteration
 
